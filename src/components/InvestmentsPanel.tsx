@@ -40,7 +40,7 @@ export const InvestmentsPanel: React.FC = () => {
           <div className="mt-6 space-y-4">
             {Object.entries(categoryData.subAllocations).map(([subKey, subPct]) => {
               const subAmount = (subPct / 100) * monthlyIncome;
-              const labels: Record<string, string> = { equity: 'Equity (SIP/Stocks)', debt: 'Debt (PPF/EPF/FD)', gold: 'Gold (SGB/ETF)' };
+              const labels: Record<string, string> = { equity: 'Equity (SIP/Stocks)', debt: 'Debt (PPF/EPF)', gold: 'Gold (SGB/ETF)', savings: 'Savings (FD/RD/Bank)' };
               return (
                 <div key={subKey} className="group">
                   <div className="flex justify-between items-end mb-1.5">
@@ -52,12 +52,12 @@ export const InvestmentsPanel: React.FC = () => {
                       type="range"
                       min="0"
                       max="50"
-                      step="0.1"
+                      step="1"
                       value={subPct}
                       onChange={(e) => updateSubAllocation('investments', subKey, parseFloat(e.target.value))}
                       className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-purple-500 transition-shadow accent-purple-600"
                     />
-                    <span className="text-xs text-gray-400 font-medium w-10 text-right">{subPct.toFixed(1)}%</span>
+                    <span className="text-xs text-gray-400 font-medium w-10 text-right">{subPct.toFixed(0)}%</span>
                   </div>
                 </div>
               );

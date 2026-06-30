@@ -8,6 +8,8 @@ import { SavingsProjectionChart } from './components/charts/SavingsProjectionCha
 import { CategoryCard } from './components/CategoryCard';
 import { InvestmentsPanel } from './components/InvestmentsPanel';
 import { EmergencyFund } from './components/EmergencyFund';
+import { LoansPanel } from './components/LoansPanel';
+import { BottomSummary } from './components/BottomSummary';
 
 import { 
   HomeIcon, 
@@ -17,11 +19,12 @@ import {
   ShieldCheckIcon, 
   BanknotesIcon,
   ChartPieIcon,
-  ArrowTrendingUpIcon
+  ArrowTrendingUpIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
 const App: React.FC = () => {
-  const { monthlyIncome } = useBudgetStore();
+  const { monthlyIncome, resetToRecommended } = useBudgetStore();
   const hasIncome = monthlyIncome > 0;
 
   return (
@@ -42,9 +45,18 @@ const App: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4">
           <Summary />
           
-          <div className="mt-8 mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Your Bento Dashboard</h2>
-            <p className="text-sm text-gray-500">Adjust the deep sliders below to customize your sub-allocations.</p>
+          <div className="mt-8 mb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Your Bento Dashboard</h2>
+              <p className="text-sm text-gray-500">Adjust the deep sliders below to customize your sub-allocations.</p>
+            </div>
+            <button 
+              onClick={resetToRecommended}
+              className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm cursor-pointer"
+            >
+              <ArrowPathIcon className="w-4 h-4" />
+              Reset
+            </button>
           </div>
 
           {/* Bento Grid Container */}
@@ -154,12 +166,21 @@ const App: React.FC = () => {
               />
               <EmergencyFund />
             </div>
+
+            <div className="col-span-1 md:col-span-2 xl:col-span-3">
+              <LoansPanel />
+            </div>
             
           </div>
 
-          <div className="mt-16 text-center pt-8 border-t border-gray-100">
-            <p className="text-xs text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <BottomSummary />
+
+          <div className="mt-16 text-center pt-8 border-t border-gray-100 pb-8">
+            <p className="text-xs text-gray-400 max-w-2xl mx-auto leading-relaxed mb-4">
               <strong>Disclaimer:</strong> This tool provides general educational budgeting guidance based on common financial planning principles for salaried individuals in India, and is not personalized investment, tax, or legal advice.
+            </p>
+            <p className="text-sm font-medium text-gray-500">
+              &copy; {new Date().getFullYear()} Designed & Developed by Jayanth Chinnatumbalam
             </p>
           </div>
         </div>

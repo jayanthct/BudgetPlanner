@@ -21,7 +21,7 @@ const defaultSubSplits = {
   wants: { dining: 0.40, shopping: 0.40, hobbies: 0.20 },
   subscriptions: { ott: 0.60, music_cloud: 0.40 },
   goals: { travel: 0.60, short_term: 0.40 },
-  investments: { equity: 0.60, debt: 0.25, gold: 0.15 },
+  investments: { equity: 0.30, debt: 0.125, gold: 0.075, savings: 0.50 },
   insurance: { term: 0.50, health: 0.50 },
   buffer: { emergency: 0.70, liquid: 0.30 },
   excess: { unallocated: 1.0 }

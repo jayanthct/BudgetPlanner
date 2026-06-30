@@ -2,12 +2,21 @@ import { create } from 'zustand';
 import type { DeepAllocationProfile } from '../lib/allocationEngine';
 import { getDeepAllocationForIncome } from '../lib/allocationEngine';
 
+export interface Loan {
+  id: string;
+  title: string;
+  amount: number;
+}
+
 interface BudgetState {
   monthlyIncome: number;
   profile: DeepAllocationProfile;
+  loans: Loan[];
   setMonthlyIncome: (income: number) => void;
   updateSubAllocation: (category: keyof DeepAllocationProfile, subKey: string, percentage: number) => void;
   resetToRecommended: () => void;
+  addLoan: (title: string, amount: number) => void;
+  removeLoan: (id: string) => void;
 }
 
 const defaultIncome = 0;
@@ -16,6 +25,7 @@ const defaultProfile = getDeepAllocationForIncome(defaultIncome);
 export const useBudgetStore = create<BudgetState>((set) => ({
   monthlyIncome: defaultIncome,
   profile: defaultProfile,
+  loans: [],
   setMonthlyIncome: (income: number) => {
     set({
       monthlyIncome: income,
@@ -36,9 +46,20 @@ export const useBudgetStore = create<BudgetState>((set) => ({
       return { profile: newProfile };
     });
   },
+  addLoan: (title: string, amount: number) => {
+    set((state) => ({
+      loans: [...state.loans, { id: Date.now().toString(), title, amount }]
+    }));
+  },
+  removeLoan: (id: string) => {
+    set((state) => ({
+      loans: state.loans.filter(l => l.id !== id)
+    }));
+  },
   resetToRecommended: () => {
     set((state) => ({
       profile: getDeepAllocationForIncome(state.monthlyIncome),
+      loans: []
     }));
   },
 }));

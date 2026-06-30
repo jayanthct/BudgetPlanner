@@ -4,7 +4,7 @@ import { formatINR } from '../lib/formatters';
 import { getCategoryTotal } from '../lib/allocationEngine';
 
 export const Summary: React.FC = () => {
-  const { monthlyIncome, profile } = useBudgetStore();
+  const { monthlyIncome, profile, loans } = useBudgetStore();
 
   if (monthlyIncome <= 0) return null;
 
@@ -15,7 +15,10 @@ export const Summary: React.FC = () => {
   const excess = profile.excess.subAllocations.unallocated;
 
   const allocatedAmount = (allocated / 100) * monthlyIncome;
-  const excessAmount = (excess / 100) * monthlyIncome;
+  const totalLoans = loans.reduce((sum, l) => sum + l.amount, 0);
+  const totalAssigned = allocatedAmount + totalLoans;
+
+  const excessAmount = ((excess / 100) * monthlyIncome) - totalLoans;
   const isDeficit = excessAmount < -0.5;
   const isSurplus = excessAmount > 0.5;
 
@@ -26,8 +29,8 @@ export const Summary: React.FC = () => {
         <span className="text-2xl font-semibold text-gray-900">{formatINR(monthlyIncome)}</span>
       </div>
       <div className="flex flex-col items-center md:items-end text-right">
-        <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Allocated Budget</span>
-        <span className="text-2xl font-semibold text-gray-900">{formatINR(allocatedAmount)}</span>
+        <span className="text-sm text-gray-500 font-medium uppercase tracking-wider">Allocated Budget + EMIs</span>
+        <span className="text-2xl font-semibold text-gray-900">{formatINR(totalAssigned)}</span>
         {(isSurplus || isDeficit) && (
           <span className={`text-sm font-semibold mt-1 ${isSurplus ? 'text-green-600' : 'text-red-500'}`}>
             {isSurplus ? '+' : ''} {formatINR(excessAmount)} {isSurplus ? 'available for buffer' : 'over budget'}

@@ -11,9 +11,10 @@ export const InvestmentBarChart: React.FC = () => {
   const eq = profile.investments.subAllocations.equity || 0;
   const db = profile.investments.subAllocations.debt || 0;
   const gd = profile.investments.subAllocations.gold || 0;
+  const sv = profile.investments.subAllocations.savings || 0;
 
   const data = {
-    labels: ['Equity', 'Debt/PPF', 'Gold'],
+    labels: ['Equity', 'Debt/PPF', 'Gold', 'Savings'],
     datasets: [
       {
         label: 'Investment Split',
@@ -21,6 +22,7 @@ export const InvestmentBarChart: React.FC = () => {
           (eq / 100) * monthlyIncome,
           (db / 100) * monthlyIncome,
           (gd / 100) * monthlyIncome,
+          (sv / 100) * monthlyIncome,
         ],
         backgroundColor: '#7828C8',
         borderRadius: 4,

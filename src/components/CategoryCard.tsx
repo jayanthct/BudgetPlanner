@@ -50,13 +50,13 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({ categoryKey, title, 
                   type="range"
                   min="0"
                   max="50"
-                  step="0.1"
+                  step="1"
                   value={subPct}
                   onChange={(e) => updateSubAllocation(categoryKey, subKey, parseFloat(e.target.value))}
                   className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 transition-shadow"
                   style={{ accentColor: colorCode }}
                 />
-                <span className="text-xs text-gray-400 font-medium w-10 text-right">{subPct.toFixed(1)}%</span>
+                <span className="text-xs text-gray-400 font-medium w-10 text-right">{subPct.toFixed(0)}%</span>
               </div>
             </div>
           );
