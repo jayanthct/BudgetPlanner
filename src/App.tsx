@@ -10,6 +10,7 @@ import { InvestmentsPanel } from './components/InvestmentsPanel';
 import { EmergencyFund } from './components/EmergencyFund';
 import { LoansPanel } from './components/LoansPanel';
 import { BottomSummary } from './components/BottomSummary';
+import { exportDashboardToPDF } from './lib/pdfExport';
 
 import { 
   HomeIcon, 
@@ -20,7 +21,8 @@ import {
   BanknotesIcon,
   ChartPieIcon,
   ArrowTrendingUpIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 
 const App: React.FC = () => {
@@ -40,23 +42,35 @@ const App: React.FC = () => {
           <p className="text-gray-500 leading-relaxed">
             Enter your monthly take-home salary above. This tool acts as a financial advisor, calculating an optimal budget allocation based on standard CA principles for salaried professionals in Bangalore.
           </p>
+          <div className="mt-8 text-sm font-medium text-gray-400">
+            &copy; {new Date().getFullYear()} Designed & Developed by Jayanth Chinnatumbalam
+          </div>
         </div>
       ) : (
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4 pb-8" id="pdf-dashboard">
           <Summary />
           
-          <div className="mt-8 mb-4 flex items-center justify-between">
+          <div className="mt-8 mb-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-gray-900">Your Bento Dashboard</h2>
               <p className="text-sm text-gray-500">Adjust the deep sliders below to customize your sub-allocations.</p>
             </div>
-            <button 
-              onClick={resetToRecommended}
-              className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm cursor-pointer"
-            >
-              <ArrowPathIcon className="w-4 h-4" />
-              Reset
-            </button>
+            <div className="flex items-center gap-3 w-full md:w-auto hide-on-pdf">
+              <button 
+                onClick={() => exportDashboardToPDF('pdf-dashboard')}
+                className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm cursor-pointer flex-1 md:flex-none"
+              >
+                <DocumentArrowDownIcon className="w-4 h-4" />
+                Export PDF
+              </button>
+              <button 
+                onClick={resetToRecommended}
+                className="flex items-center justify-center gap-2 px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm cursor-pointer flex-1 md:flex-none"
+              >
+                <ArrowPathIcon className="w-4 h-4" />
+                Reset
+              </button>
+            </div>
           </div>
 
           {/* Bento Grid Container */}
