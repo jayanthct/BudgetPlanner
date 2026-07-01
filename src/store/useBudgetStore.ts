@@ -12,11 +12,13 @@ interface BudgetState {
   monthlyIncome: number;
   profile: DeepAllocationProfile;
   loans: Loan[];
+  isEmergencyEnabled: boolean;
   setMonthlyIncome: (income: number) => void;
   updateSubAllocation: (category: keyof DeepAllocationProfile, subKey: string, percentage: number) => void;
   resetToRecommended: () => void;
   addLoan: (title: string, amount: number) => void;
   removeLoan: (id: string) => void;
+  toggleEmergency: (enabled: boolean) => void;
 }
 
 const defaultIncome = 0;
@@ -26,10 +28,12 @@ export const useBudgetStore = create<BudgetState>((set) => ({
   monthlyIncome: defaultIncome,
   profile: defaultProfile,
   loans: [],
+  isEmergencyEnabled: true,
   setMonthlyIncome: (income: number) => {
     set({
       monthlyIncome: income,
       profile: getDeepAllocationForIncome(income),
+      isEmergencyEnabled: true
     });
   },
   updateSubAllocation: (category: keyof DeepAllocationProfile, subKey: string, newPercentage: number) => {
@@ -59,7 +63,21 @@ export const useBudgetStore = create<BudgetState>((set) => ({
   resetToRecommended: () => {
     set((state) => ({
       profile: getDeepAllocationForIncome(state.monthlyIncome),
-      loans: []
+      loans: [],
+      isEmergencyEnabled: true
     }));
+  },
+  toggleEmergency: (enabled: boolean) => {
+    set((state) => {
+      const newProfile = JSON.parse(JSON.stringify(state.profile)) as DeepAllocationProfile;
+      const bufferTotal = Object.values(newProfile.buffer.subAllocations).reduce((sum, val) => sum + val, 0);
+      
+      if (enabled) {
+        newProfile.excess.subAllocations.unallocated -= bufferTotal;
+      } else {
+        newProfile.excess.subAllocations.unallocated += bufferTotal;
+      }
+      return { profile: newProfile, isEmergencyEnabled: enabled };
+    });
   },
 }));

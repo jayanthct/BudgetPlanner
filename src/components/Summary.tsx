@@ -4,13 +4,16 @@ import { formatINR } from '../lib/formatters';
 import { getCategoryTotal } from '../lib/allocationEngine';
 
 export const Summary: React.FC = () => {
-  const { monthlyIncome, profile, loans } = useBudgetStore();
+  const { monthlyIncome, profile, loans, isEmergencyEnabled } = useBudgetStore();
 
   if (monthlyIncome <= 0) return null;
 
   const allocated = Object.entries(profile)
     .filter(([k]) => k !== 'excess')
-    .reduce((sum, [_, cat]) => sum + getCategoryTotal(cat), 0);
+    .reduce((sum, [k, cat]) => {
+      if (k === 'buffer' && !isEmergencyEnabled) return sum;
+      return sum + getCategoryTotal(cat);
+    }, 0);
   
   const excess = profile.excess.subAllocations.unallocated;
 

@@ -108,6 +108,6 @@ function interpolate(lower: number, upper: number, progress: number): number {
 }
 
 // Helper to get total percentage for a category
-export function getCategoryTotal(category: CategoryData): number {
+export const getCategoryTotal = (category: CategoryData): number => {
   return Object.values(category.subAllocations).reduce((sum, val) => sum + val, 0);
-}
+};

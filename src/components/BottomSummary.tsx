@@ -4,12 +4,13 @@ import { getCategoryTotal } from '../lib/allocationEngine';
 import { formatINR } from '../lib/formatters';
 
 export const BottomSummary: React.FC = () => {
-  const { monthlyIncome, profile, loans } = useBudgetStore();
+  const { monthlyIncome, profile, loans, isEmergencyEnabled } = useBudgetStore();
   
   if (monthlyIncome <= 0) return null;
 
   const getCatAmount = (catKey: keyof typeof profile) => {
     if (catKey === 'excess') return 0;
+    if (catKey === 'buffer' && !isEmergencyEnabled) return 0;
     return (getCategoryTotal(profile[catKey]) / 100) * monthlyIncome;
   };
 
